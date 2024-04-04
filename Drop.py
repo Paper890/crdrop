@@ -104,14 +104,14 @@ def create_droplet(update, context):
     response = requests.post(url, json=payload, headers=headers)
 
     if response.status_code == 202:
-    droplet_info = response.json()['droplet']
-    ip_address = droplet_info['networks']['v4'][0]['ip_address']
-    message = f'Info Droplet:\nIP Address: {ip_address}'
-    update.message.reply_text('Droplet berhasil dibuat! Berikut informasi VPS Anda:\n' + message)
+        droplet_info = response.json()['droplet']
+        ip_address = droplet_info['networks']['v4'][0]['ip_address']
+        message = f'Info Droplet:\nIP Address: {ip_address}'
+        update.message.reply_text('Droplet berhasil dibuat! Berikut informasi VPS Anda:\n' + message)
     else:
-    update.message.reply_text('Gagal membuat droplet.')
+        update.message.reply_text('Gagal membuat droplet.')
 
-     return ConversationHandler.END
+        return ConversationHandler.END
 
 
 # Fungsi untuk mendapatkan informasi tentang semua droplet yang dimiliki pengguna
