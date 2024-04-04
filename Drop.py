@@ -7,19 +7,19 @@ NAMA, PASSWORD, UKURAN, GAMBAR, NOTIFIKASI = range(5)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
-    update.message.reply_text('Halo! Selamat datang di bot sederhana. Silakan masukkan nama droplet:')
+    update.message.reply_text('Create Droplet DO. Masukkan Username:')
     return NAMA
 
 # Fungsi untuk menangani nama droplet
 def nama_droplet(update, context):
     context.user_data['nama_droplet'] = update.message.text
-    update.message.reply_text('Silakan masukkan password untuk droplet:')
+    update.message.reply_text('Password')
     return PASSWORD
 
 # Fungsi untuk menangani password droplet
 def password_droplet(update, context):
     context.user_data['password'] = update.message.text
-    update.message.reply_text('Silakan masukkan ukuran droplet (contoh: 1gb, 2gb, dll):')
+    update.message.reply_text('Imput Ram (contoh: 1gb, 2gb, dll):')
     return UKURAN
 
 # Fungsi untuk menangani ukuran droplet dengan input yang lebih simpel
@@ -38,7 +38,7 @@ def ukuran_droplet(update, context):
     }
     if ukuran in ukuran_droplet_mapping:
         context.user_data['ukuran_droplet'] = ukuran_droplet_mapping[ukuran]
-        update.message.reply_text('Silakan masukkan image droplet (contoh: ub20, deb10, dll):')
+        update.message.reply_text('Imput OS VPS (opsi: ub20, deb10')
         return GAMBAR
     else:
         update.message.reply_text('Ukuran droplet tidak valid. Silakan masukkan ukuran yang valid (contoh: 1gb, 2gb, dll):')
@@ -158,7 +158,7 @@ def main():
 
     # Mendefinisikan handler konversasi
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('create', start)],
+        entry_points=[CommandHandler('start', start)],
         states={
             NAMA: [MessageHandler(Filters.text & ~Filters.command, nama_droplet)],
             PASSWORD: [MessageHandler(Filters.text & ~Filters.command, password_droplet)],
