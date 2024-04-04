@@ -146,7 +146,7 @@ def main():
 
     dp = updater.dispatcher
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('create_droplet', create_droplet_command)],
+        entry_points=[CommandHandler('create', create_droplet_command)],
         states={
             "NAME": [MessageHandler(Filters.text, handle_name)],
             "REGION": [MessageHandler(Filters.text, handle_region)],
