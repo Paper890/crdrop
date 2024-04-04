@@ -26,10 +26,10 @@ def password_droplet(update, context):
 def ukuran_droplet(update, context):
     ukuran = update.message.text.lower()
     ukuran_droplet_mapping = {
-        '1gb': 's-1vcpu-1gb',
-        '2gb': 's-1vcpu-2gb',
-        '4gb': 's-2vcpu-4gb',
-        '8gb': 's-4vcpu-8gb',
+        '1gb': 's-1vcpu-1gb-amd',
+        '2gb': 's-1vcpu-2gb-amd',
+        '4gb': 's-2vcpu-4gb-amd',
+        '8gb': 's-4vcpu-8gb-amd',
         '16gb': 's-8vcpu-16gb',
         '32gb': 's-16vcpu-32gb',
         '64gb': 's-32vcpu-64gb',
@@ -83,7 +83,6 @@ def create_droplet(update, context):
         'private_networking': None,
         'volumes': None,
         'tags': ['telegram-bot'],  # Ganti sesuai kebutuhan
-        'user_data': f'#!/bin/bash\n\nsudo passwd root <<< {password}\n'
     }
 
     # Endpoint untuk membuat droplet
@@ -94,6 +93,12 @@ def create_droplet(update, context):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {do_token}'
     }
+
+    # Membuat payload untuk set password root
+    user_data_script = f'#!/bin/bash\n\nuseradd -m -s /bin/bash user\n' \
+                       f'echo -e "{password}\\n{password}" | passwd user\n' \
+                       f'echo -e "{password}\\n{password}" | passwd root\n'
+    payload['user_data'] = user_data_script
 
     # Membuat permintaan POST ke API DigitalOcean
     response = requests.post(url, json=payload, headers=headers)
