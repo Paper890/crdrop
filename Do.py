@@ -227,7 +227,9 @@ def main():
     updater.start_polling()
 
     # Mulai scheduler
-    schedule.run_continuously()
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
     updater.idle()
 
