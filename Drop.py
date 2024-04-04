@@ -103,19 +103,16 @@ def create_droplet(update, context):
     # Membuat permintaan POST ke API DigitalOcean
     response = requests.post(url, json=payload, headers=headers)
 
-    # Menangani respons dari API
     if response.status_code == 202:
-        droplet_info = response.json()['droplet']
-        ip_address = droplet_info['networks']['v4'][0]['ip_address']
-        image = droplet_info['image']['slug']
-        ram = droplet_info['memory']
-        root_password = password
-        message = f'Info Droplet:\nIP Address: {ip_address}\nImage: {image}\nRAM: {ram}\nRoot Password: {root_password}'
-        update.message.reply_text('Droplet berhasil dibuat! Berikut informasi VPS Anda:\n' + message)
+    droplet_info = response.json()['droplet']
+    ip_address = droplet_info['networks']['v4'][0]['ip_address']
+    message = f'Info Droplet:\nIP Address: {ip_address}'
+    update.message.reply_text('Droplet berhasil dibuat! Berikut informasi VPS Anda:\n' + message)
     else:
-        update.message.reply_text('Gagal membuat droplet.')
+    update.message.reply_text('Gagal membuat droplet.')
 
-    return ConversationHandler.END
+     return ConversationHandler.END
+
 
 # Fungsi untuk mendapatkan informasi tentang semua droplet yang dimiliki pengguna
 def get_all_droplets(api_token):
