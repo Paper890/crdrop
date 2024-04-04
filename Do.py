@@ -115,7 +115,7 @@ schedule.every().day.do(job)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
-    update.message.reply_text('Halo! Saya adalah bot sederhana. Kirimkan pesan kepada saya.')
+    update.message.reply_text('Selamat Menggunakan Bot Ini, Beberapa Command yang bisa kamu gunakan Diantaranya: /create (Buat droplet) /delete (Delete Droplet).')
 
 # Fungsi untuk menangani pesan yang diterima
 def echo(update, context):
