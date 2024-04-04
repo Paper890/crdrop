@@ -3,7 +3,7 @@ BOT BY SAN
 sudo apt upgrade -y
 sudo apt install python3 python3-pip
 pip install requests python-telegram-bot schedule
-apt install python3-pip
+apt install python3-pip -y
 pip install python-telegram-bot</code></pre>
 
 <h1>Clone Repo</h1>
