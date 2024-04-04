@@ -73,7 +73,7 @@ def create_droplet(update, context):
     # Konfigurasi payload untuk membuat droplet dengan semua informasi yang diberikan
     payload = {
         'name': nama_droplet,
-        'region': 'nyc1',  # Ganti sesuai kebutuhan
+        'region': 'sgp1',  # Ganti sesuai kebutuhan
         'size': ukuran_droplet,
         'image': gambar,
         'ssh_keys': None,
