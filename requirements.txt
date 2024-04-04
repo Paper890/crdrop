@@ -1,3 +1,2 @@
-python-telegram-bot
-digitalocean
-python-dotenv
+pip install requests
+pip install python-telegram-bot
