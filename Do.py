@@ -1,7 +1,9 @@
 import requests
 import json
 import time
+from datetime import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
+import schedule
 
 # Dictionary untuk logaritma pengimputan size
 size_mapping = {
@@ -75,6 +77,42 @@ def get_droplet_info(token, droplet_id):
             return droplet_info
     return None
 
+# Fungsi untuk menghapus droplet berdasarkan ID droplet
+def delete_droplet(token, droplet_id):
+    url = f"https://api.digitalocean.com/v2/droplets/{droplet_id}"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    response = requests.delete(url, headers=headers)
+    return response.status_code == 204
+
+# Fungsi untuk mendapatkan daftar droplet dan memeriksa usia setiap droplet
+def check_and_delete_droplets(token):
+    url = "https://api.digitalocean.com/v2/droplets"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        droplets = response.json()["droplets"]
+        for droplet in droplets:
+            created_at = droplet["created_at"]
+            created_date = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+            current_date = datetime.utcnow()
+            age = current_date - created_date
+            if age.days >= 30:
+                droplet_id = droplet["id"]
+                delete_droplet(token, droplet_id)
+
+# Fungsi untuk menjalankan check_and_delete_droplets setiap hari
+def job():
+    check_and_delete_droplets('YOUR_DIGITALOCEAN_API_TOKEN')
+
+# Schedule job untuk dijalankan setiap hari
+schedule.every().day.do(job)
+
 # Fungsi untuk menangani perintah /start
 def start(update, context):
     update.message.reply_text('Halo! Saya adalah bot sederhana. Kirimkan pesan kepada saya.')
@@ -141,12 +179,28 @@ def handle_password(update, context):
 
     return ConversationHandler.END
 
+# Fungsi untuk menangani perintah /delete_droplet
+def delete_droplet_command(update, context):
+    update.message.reply_text("Silakan masukkan ID droplet yang ingin dihapus:")
+    return "DROPLET_ID"
+
+# Fungsi untuk menangani ID droplet yang ingin dihapus
+def handle_droplet_id(update, context):
+    context.user_data['droplet_id'] = update.message.text
+    token = 'YOUR_DIGITALOCEAN_API_TOKEN'  # Token API DigitalOcean Anda
+    droplet_id = context.user_data['droplet_id']
+    if delete_droplet(token, droplet_id):
+        update.message.reply_text(f"Droplet dengan ID {droplet_id} berhasil dihapus.")
+    else:
+        update.message.reply_text("Gagal menghapus droplet. Pastikan ID droplet benar.")
+    return ConversationHandler.END
+
 def main():
     updater = Updater('YOUR_TELEGRAM_BOT_TOKEN', use_context=True)  # Token bot Telegram Anda
 
     dp = updater.dispatcher
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('create', create_droplet_command)],
+        entry_points=[CommandHandler('create_droplet', create_droplet_command)],
         states={
             "NAME": [MessageHandler(Filters.text, handle_name)],
             "REGION": [MessageHandler(Filters.text, handle_region)],
@@ -157,13 +211,26 @@ def main():
         fallbacks=[]
     )
 
+    conv_handler_delete = ConversationHandler(
+        entry_points=[CommandHandler('delete_droplet', delete_droplet_command)],
+        states={
+            "DROPLET_ID": [MessageHandler(Filters.text, handle_droplet_id)]
+        },
+        fallbacks=[]
+    )
+
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(conv_handler)
+    dp.add_handler(conv_handler_delete)
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     updater.start_polling()
+
+    # Mulai scheduler
+    schedule.run_continuously()
+
     updater.idle()
 
 if __name__ == '__main__':
     main()
-  
+                
