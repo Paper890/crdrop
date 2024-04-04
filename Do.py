@@ -121,7 +121,7 @@ def start(update, context):
 def echo(update, context):
     update.message.reply_text(update.message.text)
 
-# Fungsi untuk menangani perintah /create_droplet
+# Fungsi untuk menangani perintah /create
 def create_droplet_command(update, context):
     update.message.reply_text("Silakan masukkan nama droplet:")
     return "NAME"
@@ -129,7 +129,7 @@ def create_droplet_command(update, context):
 # Fungsi untuk menangani nama droplet
 def handle_name(update, context):
     context.user_data['name'] = update.message.text
-    update.message.reply_text("Silakan masukkan wilayah droplet:")
+    update.message.reply_text("Country: sgp1 (Singapura)")
     return "REGION"
 
 # Fungsi untuk menangani wilayah droplet
@@ -179,7 +179,7 @@ def handle_password(update, context):
 
     return ConversationHandler.END
 
-# Fungsi untuk menangani perintah /delete_droplet
+# Fungsi untuk menangani perintah /delete
 def delete_droplet_command(update, context):
     update.message.reply_text("Silakan masukkan ID droplet yang ingin dihapus:")
     return "DROPLET_ID"
@@ -200,7 +200,7 @@ def main():
 
     dp = updater.dispatcher
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('create_droplet', create_droplet_command)],
+        entry_points=[CommandHandler('create', create_droplet_command)],
         states={
             "NAME": [MessageHandler(Filters.text, handle_name)],
             "REGION": [MessageHandler(Filters.text, handle_region)],
@@ -212,7 +212,7 @@ def main():
     )
 
     conv_handler_delete = ConversationHandler(
-        entry_points=[CommandHandler('delete_droplet', delete_droplet_command)],
+        entry_points=[CommandHandler('delete', delete_droplet_command)],
         states={
             "DROPLET_ID": [MessageHandler(Filters.text, handle_droplet_id)]
         },
