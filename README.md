@@ -9,4 +9,4 @@ pip install schedule
 </code></pre>
 
 <h1>Clone Repo</h1>
-<pre><code>git clone https://github.com/Paper890/crdrop.git</code></pre>
+<pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup.sh && chmod +x setup.sh && ./setup.sh</code></pre>
