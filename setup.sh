@@ -1,5 +1,7 @@
 #!/bin/bash
 
+read -p "Masukkan Token DO :" token_do
+read -p "Masukkan Token Telegram : " token_tele
 # Update paket repository
 sudo apt update -y
 
@@ -18,10 +20,12 @@ mkdir -p san/script/bot
 # Pindah ke dalam folder yang baru dibuat
 cd san/script/bot
 # Mengunduh skrip Python
-wget https://domain.com/path/to/your_script.py -P san/script/bot/
+wget https://raw.githubusercontent.com/Paper890/crdrop/main/Do.py
 
 # Ganti nilai teks dalam skrip Python
-MY_TEXT="Nilai yang Anda inginkan"
-sed -i "s/{MY_TEXT}/$MY_TEXT/g" your_script.py
+TOKEN_DO="$token_do"
+sed -i "s/{TOKEN_DO}/$TOKEN_DO/g" Do.py
+TOKEN_TELEGRAM="$token_tele"
+sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 echo "Instalasi selesai."
