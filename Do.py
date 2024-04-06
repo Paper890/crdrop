@@ -113,6 +113,23 @@ def job():
 # Schedule job untuk dijalankan setiap hari
 schedule.every().day.do(job)
 
+# Fungsi untuk me-Resize droplet
+def resize_droplet(token, droplet_id, new_size):
+    url = f"https://api.digitalocean.com/v2/droplets/{droplet_id}/actions"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    data = {
+        "type": "resize",
+        "size": convert_size(new_size)
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    if response.status_code == 201:
+        return True
+    else:
+        return False
+
 # Fungsi untuk menangani perintah /start
 def start(update, context):
     update.message.reply_text('Selamat Menggunakan Bot Ini, Beberapa Command yang bisa kamu gunakan Diantaranya: /create (Buat droplet) /delete (Delete Droplet).')
@@ -196,6 +213,34 @@ def handle_droplet_id(update, context):
         update.message.reply_text("Gagal menghapus droplet. Pastikan ID droplet benar.")
     return ConversationHandler.END
 
+
+# Fungsi untuk menangani perintah /resize
+def resize_droplet_command(update, context):
+    update.message.reply_text("Masukkan ID")
+    return "RESIZE_DROPLET_ID"
+
+# Fungsi untuk menangani ID droplet yang ingin di-Resize
+def handle_resize_droplet_id(update, context):
+    context.user_data['resize_droplet_id'] = update.message.text
+    update.message.reply_text("Set New Size (1GB, 2GB, 4GB, atau 8GB):")
+    return "NEW_SIZE"
+
+# Fungsi untuk menangani ukuran baru droplet
+def handle_new_size(update, context):
+    context.user_data['new_size'] = update.message.text
+    token = 'digitalocean_token'  # Token API DigitalOcean Anda
+    droplet_id = context.user_data['resize_droplet_id']
+    new_size = context.user_data['new_size']
+    
+    update.message.reply_text("Proses Resize sedang berlangsung, mohon tunggu sebentar...")
+    time.sleep(60)  # Menunda selama 1 menit
+    
+    if resize_droplet(token, droplet_id, new_size):
+        update.message.reply_text(f"Success ✅.")
+    else:
+        update.message.reply_text("Gagal me-Resize droplet. Pastikan ID droplet dan ukuran baru benar.")
+    return ConversationHandler.END
+    
 def main():
     updater = Updater('TOKEN_TELEGRAM', use_context=True)  # Token bot Telegram Anda
 
@@ -220,9 +265,19 @@ def main():
         fallbacks=[]
     )
 
+    conv_handler_resize = ConversationHandler(
+        entry_points=[CommandHandler('resize', resize_droplet_command)],
+        states={
+            "RESIZE_DROPLET_ID": [MessageHandler(Filters.text, handle_resize_droplet_id)],
+            "NEW_SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_new_size)]
+        },
+        fallbacks=[]
+    )
+
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(conv_handler)
     dp.add_handler(conv_handler_delete)
+    dp.add_handler(conv_handler_resize)
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     updater.start_polling()
