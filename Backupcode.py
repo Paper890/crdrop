@@ -2,7 +2,6 @@ import requests
 import json
 import time
 from datetime import datetime
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 import schedule
 
@@ -116,10 +115,7 @@ schedule.every().day.do(job)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
-    keyboard = [[InlineKeyboardButton("Create", callback_data='create'),
-                 InlineKeyboardButton("Delete", callback_data='delete')]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Halo! Saya adalah bot sederhana.', reply_markup=reply_markup)
+    update.message.reply_text('Selamat Menggunakan Bot Ini, Beberapa Command yang bisa kamu gunakan Diantaranya: /create (Buat droplet) /delete (Delete Droplet).')
 
 # Fungsi untuk menangani pesan yang diterima
 def echo(update, context):
@@ -228,7 +224,6 @@ def main():
     dp.add_handler(conv_handler)
     dp.add_handler(conv_handler_delete)
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-    dp.add_handler(CallbackQueryHandler(button))
 
     updater.start_polling()
 
