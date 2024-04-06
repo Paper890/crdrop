@@ -7,3 +7,5 @@ pip install requests
 pip install python-telegram-bot==12.0.0
 pip install schedule
 </code></pre>
+
+<pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup.sh && chmod x+ setup.sh && ./setup.sh</code></pre>
