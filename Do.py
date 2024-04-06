@@ -120,20 +120,44 @@ def resize_droplet(token, droplet_id, new_size):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {token}'
     }
-    data = {
+    resize_data = {
         "type": "resize",
         "size": convert_size(new_size)
     }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.post(url, headers=headers, data=json.dumps(resize_data))
     if response.status_code == 201:
-        return True
-    else:
-        return False
+        action_id = response.json()['action']['id']
+        # Menunggu hingga tindakan resize selesai
+        action_status = wait_for_action_completion(token, action_id)
+        if action_status == 'completed':
+            # Jika berhasil me-resize, maka mengaktifkan kembali droplet
+            power_on_data = {"type": "power_on"}
+            response_power_on = requests.post(url, headers=headers, data=json.dumps(power_on_data))
+            if response_power_on.status_code == 201:
+                return True
+    return False
+
+def wait_for_action_completion(token, action_id):
+    url = f"https://api.digitalocean.com/v2/actions/{action_id}"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    while True:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            action_status = response.json()['action']['status']
+            if action_status in ['completed', 'errored']:
+                return action_status
+        # Jeda sebelum memeriksa lagi
+        time.sleep(5)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
-    update.message.reply_text('Selamat Menggunakan Bot Ini, Beberapa Command yang bisa kamu gunakan Diantaranya: /create (Buat droplet) /delete (Delete Droplet).')
-
+    update.message.reply_text("🤖 DigitalOcean Manager Bot 🤖 \n"
+                              "  /create : Buat Droplet\n"
+                              "  /resize : Ubah Size Ram\n"
+                              "  /delete : Delete Droplet")
 # Fungsi untuk menangani pesan yang diterima
 def echo(update, context):
     update.message.reply_text(update.message.text)
