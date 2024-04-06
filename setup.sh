@@ -38,5 +38,8 @@ TOKEN_TELEGRAM="$token_tele"
 sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 # fungsi running as system
-
+cd
+cd /etc/systemd/system
+wget https://raw.githubusercontent.com/Paper890/crdrop/main/Do.service
+wget https://raw.githubusercontent.com/Paper890/crdrop/main/regis.service
 echo "Instalasi selesai."
