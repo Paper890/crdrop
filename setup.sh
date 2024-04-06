@@ -23,6 +23,7 @@ read -p "Masukkan Token Github : " token_git
 #cd san/script/bot
 # Mengunduh skrip Python
 wget https://raw.githubusercontent.com/Paper890/crdrop/main/Do.py
+wget https://raw.githubusercontent.com/Paper890/crdrop/main/regis.py
 
 # FOR DO CREATE
 TOKEN_DO="$token_do"
@@ -35,5 +36,7 @@ TOKEN_GITHUB="$token_git"
 sed -i "s/{TOKEN_DO}/$TOKEN_DO/g" Do.py
 TOKEN_TELEGRAM="$token_tele"
 sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
+
+# fungsi running as system
 
 echo "Instalasi selesai."
