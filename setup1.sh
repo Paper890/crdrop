@@ -1,9 +1,11 @@
 #!/bin/bash
 
-echo -e "ISI TOKEN GITHUB UNTUK REGIS IP"
+echo -e "UNTUK CREATE DROPLET"
 read -p "Masukkan Token DO :" token_do
 read -p "Masukkan Token Telegram : " token_tele
+echo -e "UNTUK REGIS IP"
 read -p "Masukkan Token Github : " token_git
+read -p "Masukkan Token Telegram : " token_tele1
 
 #Set LocalTime
 sudo timedatectl set-timezone Asia/Jakarta
@@ -25,7 +27,7 @@ sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 # FOR REGIS IP
 TOKEN_GITHUB="$token_git"
 sed -i "s/{TOKEN_GITHUB}/$TOKEN_GITHUB/g" Do.py
-TOKEN_TELEGRAM="$token_tele"
+TOKEN_TELEGRAM="$token_tele1"
 sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 # fungsi running as system
