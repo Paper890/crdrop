@@ -27,6 +27,11 @@ def convert_size(size):
 def convert_image(image):
     return image_mapping.get(image.lower())
 
+# Fungsi untuk membuat nama droplet secara otomatis
+def generate_random_name():
+    random_id = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
+    return f"ID{random_id}"
+
 # Fungsi untuk membuat droplet DigitalOcean
 def create_droplet(token, name, region, size, image, password):
     url = "https://api.digitalocean.com/v2/droplets"
@@ -125,7 +130,7 @@ def check_and_delete_droplets(token):
 
 # Fungsi untuk menjalankan check_and_delete_droplets setiap hari
 def job():
-    check_and_delete_droplets('dop_v1_652105d2f74e0282ec70a287456dc0e2045cb5130f5da0c9e388511ed039569d')
+    check_and_delete_droplets('TOKEN_DO')
 
 # Schedule job untuk dijalankan setiap hari
 schedule.every().day.do(job)
@@ -140,19 +145,10 @@ def echo(update, context):
 
 # Fungsi untuk menangani perintah /create
 def create_droplet_command(update, context):
-    update.message.reply_text("Silakan masukkan nama droplet:")
-    return "NAME"
-
-# Fungsi untuk menangani nama droplet
-def handle_name(update, context):
-    context.user_data['name'] = update.message.text
-    update.message.reply_text("Country: sgp1 (Singapura)")
-    return "REGION"
-
-# Fungsi untuk menangani wilayah droplet
-def handle_region(update, context):
-    context.user_data['region'] = update.message.text
-    update.message.reply_text("Silakan masukkan ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
+    random_name = generate_random_name()
+    context.user_data['name'] = random_name
+    context.user_data['region'] = "sgp1"  # Set region secara otomatis ke sgp1
+    update.message.reply_text("Nama droplet akan otomatis dibuat, lanjutkan ke ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
@@ -169,7 +165,7 @@ def handle_image(update, context):
 
 # Fungsi untuk menangani password droplet dan membuat droplet
 def handle_password(update, context):
-    token = 'dop_v1_652105d2f74e0282ec70a287456dc0e2045cb5130f5da0c9e388511ed039569d'  # Token API DigitalOcean Anda
+    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
     password = update.message.text
     
     name = context.user_data['name']
@@ -211,7 +207,7 @@ def handle_resize_droplet_id(update, context):
 # Fungsi untuk menangani ukuran baru droplet
 def handle_new_size(update, context):
     context.user_data['new_size'] = update.message.text
-    token = 'dop_v1_652105d2f74e0282ec70a287456dc0e2045cb5130f5da0c9e388511ed039569d'  # Token API DigitalOcean Anda
+    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['resize_droplet_id']
     new_size = context.user_data['new_size']
     
@@ -232,7 +228,7 @@ def delete_droplet_command(update, context):
 # Fungsi untuk menangani ID droplet yang ingin dihapus
 def handle_droplet_id(update, context):
     context.user_data['droplet_id'] = update.message.text
-    token = 'dop_v1_652105d2f74e0282ec70a287456dc0e2045cb5130f5da0c9e388511ed039569d'  # Token API DigitalOcean Anda
+    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['droplet_id']
     if delete_droplet(token, droplet_id):
         update.message.reply_text(f"Droplet dengan ID {droplet_id} berhasil dihapus.")
@@ -241,7 +237,7 @@ def handle_droplet_id(update, context):
     return ConversationHandler.END
 
 def main():
-    updater = Updater('6862345220:AAG1gx_Ups_UcdS1RnShB3go0XddO38op3M', use_context=True)  # Token bot Telegram Anda
+    updater = Updater('TOKEN_TELEGRAM', use_context=True)  # Token bot Telegram Anda
 
     dp = updater.dispatcher
     conv_handler = ConversationHandler(
