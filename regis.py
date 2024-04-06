@@ -61,13 +61,13 @@ def add_text_to_file(username, repository, filename, text, token):
         print("Failed to add text to file.")
 
 def main():
-    bot_token = 'TOKEN_TELEGRAM'
+    bot_token = '{TOKEN_TELEGRAM}'
 
     global github_username, github_repository, file_name, github_token
     github_username = 'Paper890'
     github_repository = 'san'
     file_name = 'izin'
-    github_token = 'TOKEN_GITHUB'
+    github_token = '{TOKEN_GITHUB}'
 
     updater = Updater(bot_token, use_context=True)
     dp = updater.dispatcher
