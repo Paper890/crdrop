@@ -252,7 +252,7 @@ def handle_resize_droplet_id(update, context):
 # Fungsi untuk menangani ukuran baru droplet
 def handle_new_size(update, context):
     context.user_data['new_size'] = update.message.text
-    token = 'digitalocean_token'  # Token API DigitalOcean Anda
+    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['resize_droplet_id']
     new_size = context.user_data['new_size']
     
