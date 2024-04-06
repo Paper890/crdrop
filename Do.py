@@ -7,10 +7,10 @@ import schedule
 
 # Dictionary untuk logaritma pengimputan size
 size_mapping = {
-    '1gb': 's-1vcpu-1gb-amd',
-    '2gb': 's-1vcpu-2gb-amd',
-    '4gb': 's-2vcpu-4gb-amd',
-    '8gb': 's-4vcpu-8gb-amd'
+    '1': 's-1vcpu-1gb-amd',
+    '2': 's-1vcpu-2gb-amd',
+    '4': 's-2vcpu-4gb-amd',
+    '8': 's-4vcpu-8gb-amd'
 }
 
 # Dictionary untuk logaritma pengimputan image
@@ -164,31 +164,31 @@ def echo(update, context):
 
 # Fungsi untuk menangani perintah /create
 def create_droplet_command(update, context):
-    update.message.reply_text("Silakan masukkan nama droplet:")
+    update.message.reply_text("Set Name")
     return "NAME"
 
 # Fungsi untuk menangani nama droplet
 def handle_name(update, context):
     context.user_data['name'] = update.message.text
-    update.message.reply_text("Country: sgp1 (Singapura)")
+    update.message.reply_text("Region: sgp1 (Singapura)")
     return "REGION"
 
 # Fungsi untuk menangani wilayah droplet
 def handle_region(update, context):
     context.user_data['region'] = update.message.text
-    update.message.reply_text("Silakan masukkan ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set Ram (1, 2, 4, & 8):")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
 def handle_size(update, context):
     context.user_data['size'] = update.message.text
-    update.message.reply_text("Silakan masukkan jenis image droplet (ub20 untuk Ubuntu 20.04 atau deb10 untuk Debian 10):")
+    update.message.reply_text("Set OS (ub20 untuk Ubuntu 20.04 atau deb10 untuk Debian 10):")
     return "IMAGE"
 
 # Fungsi untuk menangani image droplet
 def handle_image(update, context):
     context.user_data['image'] = update.message.text
-    update.message.reply_text("Silakan masukkan password untuk droplet:")
+    update.message.reply_text("Set Password")
     return "PASSWORD"
 
 # Fungsi untuk menangani password droplet dan membuat droplet
@@ -223,7 +223,7 @@ def handle_password(update, context):
 
 # Fungsi untuk menangani perintah /delete
 def delete_droplet_command(update, context):
-    update.message.reply_text("Silakan masukkan ID droplet yang ingin dihapus:")
+    update.message.reply_text("ID Droplet")
     return "DROPLET_ID"
 
 # Fungsi untuk menangani ID droplet yang ingin dihapus
@@ -246,7 +246,7 @@ def resize_droplet_command(update, context):
 # Fungsi untuk menangani ID droplet yang ingin di-Resize
 def handle_resize_droplet_id(update, context):
     context.user_data['resize_droplet_id'] = update.message.text
-    update.message.reply_text("Set New Size (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set New Size (1, 2, 4, & 8):")
     return "NEW_SIZE"
 
 # Fungsi untuk menangani ukuran baru droplet
@@ -274,7 +274,7 @@ def main():
         states={
             "NAME": [MessageHandler(Filters.text, handle_name)],
             "REGION": [MessageHandler(Filters.text, handle_region)],
-            "SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_size)],
+            "SIZE": [MessageHandler(Filters.regex(r'^(1|2|4|8)$'), handle_size)],
             "IMAGE": [MessageHandler(Filters.regex(r'^(ub20|deb10)$'), handle_image)],
             "PASSWORD": [MessageHandler(Filters.text, handle_password)]
         },
@@ -293,7 +293,7 @@ def main():
         entry_points=[CommandHandler('resize', resize_droplet_command)],
         states={
             "RESIZE_DROPLET_ID": [MessageHandler(Filters.text, handle_resize_droplet_id)],
-            "NEW_SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_new_size)]
+            "NEW_SIZE": [MessageHandler(Filters.regex(r'^(1|2|4|8)$'), handle_new_size)]
         },
         fallbacks=[]
     )
