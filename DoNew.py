@@ -27,10 +27,13 @@ def convert_size(size):
 def convert_image(image):
     return image_mapping.get(image.lower())
 
-# Fungsi untuk membuat nama droplet secara otomatis
-def generate_random_name():
-    random_id = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-    return f"ID{random_id}"
+# Fungsi untuk mengonversi ukuran droplet ke format yang diinginkan
+def convert_size(size):
+    return size_mapping.get(size.lower())
+
+# Fungsi untuk mengonversi image droplet ke format yang diinginkan
+def convert_image(image):
+    return image_mapping.get(image.lower())
 
 # Fungsi untuk membuat droplet DigitalOcean
 def create_droplet(token, name, region, size, image, password):
@@ -155,10 +158,19 @@ def echo(update, context):
 
 # Fungsi untuk menangani perintah /create
 def create_droplet_command(update, context):
-    random_name = generate_random_name()
-    context.user_data['name'] = random_name
-    context.user_data['region'] = "sgp1"  # Set region secara otomatis ke sgp1
-    update.message.reply_text("Set Size Ram (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Silakan masukkan nama droplet:")
+    return "NAME"
+
+# Fungsi untuk menangani nama droplet
+def handle_name(update, context):
+    context.user_data['name'] = update.message.text
+    update.message.reply_text("Country: sgp1 (Singapura)")
+    return "REGION"
+
+# Fungsi untuk menangani wilayah droplet
+def handle_region(update, context):
+    context.user_data['region'] = update.message.text
+    update.message.reply_text("Silakan masukkan ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
@@ -256,6 +268,8 @@ def main():
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('create', create_droplet_command)],
         states={
+            "NAME": [MessageHandler(Filters.text, handle_name)],
+            "REGION": [MessageHandler(Filters.text, handle_region)],
             "SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_size)],
             "IMAGE": [MessageHandler(Filters.regex(r'^(ub20|deb10)$'), handle_image)],
             "PASSWORD": [MessageHandler(Filters.text, handle_password)]
