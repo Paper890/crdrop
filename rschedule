@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Tentukan waktu reboot (contoh: setiap hari pukul 03:00)
+reboot_time="03:00"
+
+# Loop tak terbatas
+while true; do
+    # Ambil waktu saat ini
+    current_time=$(date +"%H:%M")
+    
+    # Cek apakah waktu saat ini sama dengan waktu reboot yang ditentukan
+    if [ "$current_time" == "$reboot_time" ]; then
+        # Lakukan reboot
+        echo "Melakukan reboot pada $reboot_time..."
+        sudo reboot
+    fi
+    
+    # Tunggu 1 menit sebelum memeriksa kembali
+    sleep 60
+done
