@@ -11,3 +11,4 @@ pip install schedule
 mkdir -p san/bot
 cd
 cd san/bot
+git clone https://raw.githubusercontent.com/Paper890/crdrop
