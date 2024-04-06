@@ -1,6 +1,8 @@
 import requests
 import json
 import time
+import random
+import string
 from datetime import datetime
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 import schedule
@@ -26,6 +28,12 @@ def convert_size(size):
 # Fungsi untuk mengonversi image droplet ke format yang diinginkan
 def convert_image(image):
     return image_mapping.get(image.lower())
+
+# Fungsi untuk menghasilkan nama droplet acak
+def generate_random_name():
+    random_id = 'ID' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    random_text = ' '.join(random.choices(string.ascii_lowercase, k=2))
+    return f"{random_id}-{random_text}"
 
 # Fungsi untuk membuat droplet DigitalOcean
 def create_droplet(token, name, region, size, image, password):
@@ -76,6 +84,20 @@ def get_droplet_info(token, droplet_id):
             }
             return droplet_info
     return None
+
+# Fungsi untuk mengedit droplet
+def edit_droplet(token, droplet_id, new_size):
+    url = f"https://api.digitalocean.com/v2/droplets/{droplet_id}/resize"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    data = {
+        "type": "resize",
+        "size": new_size
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+    return response.status_code == 204
 
 # Fungsi untuk menghapus droplet berdasarkan ID droplet
 def delete_droplet(token, droplet_id):
@@ -128,14 +150,15 @@ def create_droplet_command(update, context):
 
 # Fungsi untuk menangani nama droplet
 def handle_name(update, context):
-    context.user_data['name'] = update.message.text
-    update.message.reply_text("Country: sgp1 (Singapura)")
+    context.user_data['name'] = generate_random_name()
+    update.message.reply_text("Negara: sg1 (Singapura)")
+    update.message.reply_text(f"Nama droplet Anda: {context.user_data['name']}")
     return "REGION"
 
 # Fungsi untuk menangani wilayah droplet
 def handle_region(update, context):
-    context.user_data['region'] = update.message.text
-    update.message.reply_text("Silakan masukkan ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
+    context.user_data['region'] = "sg1"
+    update.message.reply_text("Negara: sg1 (Singapura)")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
@@ -178,6 +201,31 @@ def handle_password(update, context):
     else:
         update.message.reply_text("Gagal membuat droplet.")
 
+    return ConversationHandler.END
+
+# Fungsi untuk menangani perintah /edit
+def edit_droplet_command(update, context):
+    update.message.reply_text("Silakan masukkan ID droplet yang ingin diedit:")
+    return "EDIT_DROPLET_ID"
+
+# Fungsi untuk menangani ID droplet yang ingin diedit
+def handle_edit_droplet_id(update, context):
+    context.user_data['edit_droplet_id'] = update.message.text
+    update.message.reply_text("Silakan masukkan ukuran RAM baru untuk droplet (1GB, 2GB, 4GB, atau 8GB):")
+    return "NEW_SIZE"
+
+# Fungsi untuk menangani ukuran RAM baru droplet
+def handle_new_size(update, context):
+    context.user_data['new_size'] = update.message.text
+    update.message.reply_text("Sedang memproses pengeditan droplet...")
+    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
+    droplet_id = context.user_data['edit_droplet_id']
+    new_size = context.user_data['new_size']
+    time.sleep(60)  # Menunda selama 1 menit
+    if edit_droplet(token, droplet_id, convert_size(new_size)):
+        update.message.reply_text(f"Droplet dengan ID {droplet_id} berhasil diubah menjadi ukuran {new_size}.")
+    else:
+        update.message.reply_text("Gagal mengedit droplet. Pastikan ID droplet dan ukuran baru benar.")
     return ConversationHandler.END
 
 # Fungsi untuk menangani perintah /delete
