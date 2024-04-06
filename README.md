@@ -9,3 +9,4 @@ pip install schedule
 </code></pre>
 
 <pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup.sh && chmod +x setup.sh && ./setup.sh</code></pre>
+<pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup1.sh && chmod +x setup1.sh && ./setup1.sh</code></pre>
