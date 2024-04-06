@@ -145,8 +145,10 @@ schedule.every().day.do(job)
 
 # Fungsi untuk menangani perintah /start
 def start(update, context):
-    update.message.reply_text('Selamat Menggunakan Bot Ini, Beberapa Command yang bisa kamu gunakan Diantaranya: /create (Buat droplet) /delete (Delete Droplet).')
-
+    update.message.reply_text("🤖 DigitalOcean Manager Bot 🤖 \n"
+                              "  /create : Buat Droplet\n"
+                              "  /resize : Ubah Ram\n"
+                              "  /delete : Delete Droplet")
 # Fungsi untuk menangani pesan yang diterima
 def echo(update, context):
     update.message.reply_text(update.message.text)
@@ -156,19 +158,19 @@ def create_droplet_command(update, context):
     random_name = generate_random_name()
     context.user_data['name'] = random_name
     context.user_data['region'] = "sgp1"  # Set region secara otomatis ke sgp1
-    update.message.reply_text("Nama droplet akan otomatis dibuat, lanjutkan ke ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set Size Ram (1GB, 2GB, 4GB, atau 8GB):")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
 def handle_size(update, context):
     context.user_data['size'] = update.message.text
-    update.message.reply_text("Silakan masukkan jenis image droplet (ub20 untuk Ubuntu 20.04 atau deb10 untuk Debian 10):")
+    update.message.reply_text("Set OS (ub20 untuk Ubuntu 20.04 atau deb10 untuk Debian 10):")
     return "IMAGE"
 
 # Fungsi untuk menangani image droplet
 def handle_image(update, context):
     context.user_data['image'] = update.message.text
-    update.message.reply_text("Silakan masukkan password untuk droplet:")
+    update.message.reply_text("Set Password Droplet")
     return "PASSWORD"
 
 # Fungsi untuk menangani password droplet dan membuat droplet
@@ -203,13 +205,13 @@ def handle_password(update, context):
 
 # Fungsi untuk menangani perintah /resize
 def resize_droplet_command(update, context):
-    update.message.reply_text("Silakan masukkan ID droplet yang ingin di-Resize:")
+    update.message.reply_text("Masukkan ID")
     return "RESIZE_DROPLET_ID"
 
 # Fungsi untuk menangani ID droplet yang ingin di-Resize
 def handle_resize_droplet_id(update, context):
     context.user_data['resize_droplet_id'] = update.message.text
-    update.message.reply_text("Silakan masukkan ukuran baru untuk droplet (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set New Size (1GB, 2GB, 4GB, atau 8GB):")
     return "NEW_SIZE"
 
 # Fungsi untuk menangani ukuran baru droplet
@@ -230,7 +232,7 @@ def handle_new_size(update, context):
 
 # Fungsi untuk menangani perintah /delete
 def delete_droplet_command(update, context):
-    update.message.reply_text("Silakan masukkan ID droplet yang ingin dihapus:")
+    update.message.reply_text("Masukkan ID")
     return "DROPLET_ID"
 
 # Fungsi untuk menangani ID droplet yang ingin dihapus
@@ -239,7 +241,7 @@ def handle_droplet_id(update, context):
     token = 'digitalocean_token'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['droplet_id']
     if delete_droplet(token, droplet_id):
-        update.message.reply_text(f"Droplet dengan ID {droplet_id} berhasil dihapus.")
+        update.message.reply_text(f"Delete Success ✅")
     else:
         update.message.reply_text("Gagal menghapus droplet. Pastikan ID droplet benar.")
     return ConversationHandler.END
