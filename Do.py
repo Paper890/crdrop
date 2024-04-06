@@ -108,7 +108,7 @@ def check_and_delete_droplets(token):
 
 # Fungsi untuk menjalankan check_and_delete_droplets setiap hari
 def job():
-    check_and_delete_droplets('TOKEN_DO')
+    check_and_delete_droplets('{TOKEN_DO}')
 
 # Schedule job untuk dijalankan setiap hari
 schedule.every().day.do(job)
@@ -193,7 +193,7 @@ def handle_image(update, context):
 
 # Fungsi untuk menangani password droplet dan membuat droplet
 def handle_password(update, context):
-    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
+    token = '{TOKEN_DO}'  # Token API DigitalOcean Anda
     password = update.message.text
 
     name = context.user_data['name']
@@ -229,7 +229,7 @@ def delete_droplet_command(update, context):
 # Fungsi untuk menangani ID droplet yang ingin dihapus
 def handle_droplet_id(update, context):
     context.user_data['droplet_id'] = update.message.text
-    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
+    token = '{TOKEN_DO}'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['droplet_id']
     if delete_droplet(token, droplet_id):
         update.message.reply_text(f"Droplet dengan ID {droplet_id} berhasil dihapus.")
@@ -252,7 +252,7 @@ def handle_resize_droplet_id(update, context):
 # Fungsi untuk menangani ukuran baru droplet
 def handle_new_size(update, context):
     context.user_data['new_size'] = update.message.text
-    token = 'TOKEN_DO'  # Token API DigitalOcean Anda
+    token = '{TOKEN_DO}'  # Token API DigitalOcean Anda
     droplet_id = context.user_data['resize_droplet_id']
     new_size = context.user_data['new_size']
     
@@ -266,7 +266,7 @@ def handle_new_size(update, context):
     return ConversationHandler.END
     
 def main():
-    updater = Updater('TOKEN_TELEGRAM', use_context=True)  # Token bot Telegram Anda
+    updater = Updater('{TOKEN_TELEGRAM}', use_context=True)  # Token bot Telegram Anda
 
     dp = updater.dispatcher
     conv_handler = ConversationHandler(
