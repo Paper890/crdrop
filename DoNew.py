@@ -7,10 +7,10 @@ import schedule
 
 # Dictionary untuk logaritma pengimputan size
 size_mapping = {
-    '1gb': 's-1vcpu-1gb-amd',
-    '2gb': 's-1vcpu-2gb-amd',
-    '4gb': 's-2vcpu-4gb-amd',
-    '8gb': 's-4vcpu-8gb-amd'
+    '1': 's-1vcpu-1gb-amd',
+    '2': 's-1vcpu-2gb-amd',
+    '4': 's-2vcpu-4gb-amd',
+    '8': 's-4vcpu-8gb-amd'
 }
 
 # Dictionary untuk logaritma pengimputan image
@@ -170,7 +170,7 @@ def handle_name(update, context):
 # Fungsi untuk menangani wilayah droplet
 def handle_region(update, context):
     context.user_data['region'] = update.message.text
-    update.message.reply_text("Silakan masukkan ukuran droplet (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set Ram (1, 2, 4, atau 8):")
     return "SIZE"
 
 # Fungsi untuk menangani ukuran droplet
@@ -223,7 +223,7 @@ def resize_droplet_command(update, context):
 # Fungsi untuk menangani ID droplet yang ingin di-Resize
 def handle_resize_droplet_id(update, context):
     context.user_data['resize_droplet_id'] = update.message.text
-    update.message.reply_text("Set New Size (1GB, 2GB, 4GB, atau 8GB):")
+    update.message.reply_text("Set New Ram (1, 2, 4, atau 8):")
     return "NEW_SIZE"
 
 # Fungsi untuk menangani ukuran baru droplet
@@ -270,7 +270,7 @@ def main():
         states={
             "NAME": [MessageHandler(Filters.text, handle_name)],
             "REGION": [MessageHandler(Filters.text, handle_region)],
-            "SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_size)],
+            "SIZE": [MessageHandler(Filters.regex(r'^(1|2|4|8)$'), handle_size)],
             "IMAGE": [MessageHandler(Filters.regex(r'^(ub20|deb10)$'), handle_image)],
             "PASSWORD": [MessageHandler(Filters.text, handle_password)]
         },
@@ -289,7 +289,7 @@ def main():
     entry_points=[CommandHandler('resize', resize_droplet_command)],
     states={
         "RESIZE_DROPLET_ID": [MessageHandler(Filters.text, handle_resize_droplet_id)],
-        "NEW_SIZE": [MessageHandler(Filters.regex(r'^(1GB|2GB|4GB|8GB)$'), handle_new_size)]
+        "NEW_SIZE": [MessageHandler(Filters.regex(r'^(1|2|4|8)$'), handle_new_size)]
     },
     fallbacks=[]
     )
