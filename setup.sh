@@ -18,6 +18,10 @@ pip install requests
 pip install python-telegram-bot==12.0.0
 pip install schedule
 
+#Set LocalTime
+sudo timedatectl set-timezone Asia/Jakarta
+
+
 mkdir -p san/script/bot
 # Pindah ke dalam folder yang baru dibuat
 cd san/script/bot
@@ -33,7 +37,7 @@ sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 # FOR REGIS IP
 TOKEN_GITHUB="$token_git"
-sed -i "s/{TOKEN_DO}/$TOKEN_DO/g" Do.py
+sed -i "s/{TOKEN_GITHUB}/$TOKEN_GITHUB/g" Do.py
 TOKEN_TELEGRAM="$token_tele"
 sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
