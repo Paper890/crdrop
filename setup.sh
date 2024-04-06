@@ -3,22 +3,22 @@
 read -p "Masukkan Token DO :" token_do
 read -p "Masukkan Token Telegram : " token_tele
 # Update paket repository
-sudo apt update -y
+#sudo apt update -y
 
 # Upgrade paket yang sudah terinstal
-sudo apt upgrade -y
+#sudo apt upgrade -y
 
 # Instal Python 3 dan pip
-sudo apt install python3 python3-pip -y
+#sudo apt install python3 python3-pip -y
 
 # Instal dependensi Python
-pip install requests
-pip install python-telegram-bot==12.0.0
-pip install schedule
+#pip install requests
+#pip install python-telegram-bot==12.0.0
+#pip install schedule
 
-mkdir -p san/script/bot
+#mkdir -p san/script/bot
 # Pindah ke dalam folder yang baru dibuat
-cd san/script/bot
+#cd san/script/bot
 # Mengunduh skrip Python
 wget https://raw.githubusercontent.com/Paper890/crdrop/main/Do.py
 
