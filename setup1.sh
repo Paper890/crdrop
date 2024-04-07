@@ -26,9 +26,9 @@ sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 # FOR REGIS IP
 TOKEN_GITHUB="$token_git"
-sed -i "s/{TOKEN_GITHUB}/$TOKEN_GITHUB/g" Do.py
+sed -i "s/{TOKEN_GITHUB}/$TOKEN_GITHUB/g" regis.py
 TOKEN_TELEGRAM="$token_tele1"
-sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
+sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" regis.py
 
 # fungsi running as system
 cd
