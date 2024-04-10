@@ -1,4 +1,6 @@
 #!/bin/bash
+cd
+rm -r san
 
 echo -e "UNTUK CREATE DROPLET"
 read -p "Masukkan Token DO :" token_do
@@ -6,10 +8,8 @@ read -p "Masukkan Token Telegram : " token_tele
 echo -e "UNTUK REGIS IP"
 read -p "Masukkan Token Github : " token_git
 read -p "Masukkan Token Telegram : " token_tele1
-
-#Set LocalTime
-sudo timedatectl set-timezone Asia/Jakarta
-
+echo -e "Mengambil Informasi Token"
+sleep 2
 
 mkdir -p san/script/bot
 # Pindah ke dalam folder yang baru dibuat
