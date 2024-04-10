@@ -14,3 +14,6 @@ TOKEN_TELEGRAM="$token_tele"
 sed -i "s/{TOKEN_TELEGRAM}/$TOKEN_TELEGRAM/g" Do.py
 
 echo "Instalasi selesai."
+
+cd
+rm setupdo.sh
