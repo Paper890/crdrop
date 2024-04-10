@@ -50,3 +50,6 @@ sudo systemctl enable regis
 sudo systemctl restart regis
 
 echo "Instalasi selesai."
+
+cd
+rm setup1.sh
