@@ -1,6 +1,10 @@
 #!/bin/bash
+
 cd
 rm -r san
+cd /etc/systemd/system/
+rm Do.service
+rm regis.service
 
 echo -e "UNTUK CREATE DROPLET"
 read -p "Masukkan Token DO :" token_do
