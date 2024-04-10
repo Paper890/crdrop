@@ -113,6 +113,19 @@ def job():
 # Schedule job untuk dijalankan setiap hari
 schedule.every().day.do(job)
 
+#Fungsi Mengecek Bandwith vps
+def check_bandwidth_usage():
+    url = f'https://api.digitalocean.com/v2/droplets/{droplet_id}'
+    headers = {'Authorization': f'Bearer {token}'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        droplet_data = response.json()['droplet']
+        bandwidth_used = droplet_data['networks']['transfer']['monthly']
+        bandwidth_limit = droplet_data['size']['transfer']
+        if bandwidth_used >= bandwidth_limit:
+            delete_droplet()
+            send_message("Droplet Dihapus Karna Telas Menyentuh Batas Bandwidth Bulanan")
+
 # Fungsi untuk me-Resize droplet
 def resize_droplet(token, droplet_id, new_size):
     url = f"https://api.digitalocean.com/v2/droplets/{droplet_id}/actions"
@@ -303,6 +316,7 @@ def main():
     dp.add_handler(conv_handler_delete)
     dp.add_handler(conv_handler_resize)
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    updater.job_queue.run_repeating(check_bandwidth_usage, interval=3600, first=0)
 
     updater.start_polling()
 
