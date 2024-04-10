@@ -11,3 +11,5 @@ pip install schedule
 <pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup.sh && chmod +x setup.sh && ./setup.sh</code></pre>
 <h1> Update All Bot </h1>
 <pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setup1.sh && chmod +x setup1.sh && ./setup1.sh</code></pre>
+<h1>Setup Do</h1>
+<pre><code>wget https://raw.githubusercontent.com/Paper890/crdrop/main/setupdo.sh && chmod +x setupdo.sh && ./setupdo.sh</code></pre>
