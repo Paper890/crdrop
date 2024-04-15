@@ -29,7 +29,7 @@ def echo(update, context):
         user = generate_user()
         expiry_date = calculate_expiry(days)
         add_text_to_file(github_username, github_repository, file_name, f"### {user} {expiry_date} {ip}", github_token)
-        update.message.reply_text("✅ Registrasi Berhasil :)")
+        update.message.reply_text("`✅ Registrasi Berhasil :)`", parse_mode='Markdown')
         del context.user_data['addtext']
     else:
         update.message.reply_text(update.message.text)
