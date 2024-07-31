@@ -8,7 +8,7 @@ rm regis.service
 
 echo -e "UNTUK CREATE DROPLET"
 read -p "Masukkan Token DO :" token_do
-read -p "Masukkan Token Telegram : " token_tele
+
 echo -e "UNTUK REGIS IP"
 read -p "Masukkan Token Github : " token_git
 read -p "Masukkan Token Telegram : " token_tele1
