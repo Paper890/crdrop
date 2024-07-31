@@ -7,7 +7,7 @@ import time
 TOKEN = '6997831789:AAFwbRq9rr5kvb-prGmRFBGr3jX8GDCf1tw'
 
 # Masukkan token API DigitalOcean Anda di sini
-DO_TOKEN = '{DO_TOKEN}'
+DO_TOKEN = '{TOKEN_DO}'
 
 # URL endpoint untuk membuat droplet di DigitalOcean
 DO_DROPLET_URL = 'https://api.digitalocean.com/v2/droplets'
